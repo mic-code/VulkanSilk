@@ -34,6 +34,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "11_RenderPasses", "11_Rende
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "12_GraphicsPipelineComplete", "12_GraphicsPipelineComplete\12_GraphicsPipelineComplete.csproj", "{14118DCB-150F-14D0-9C57-A408C7409E9F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "13_FrameBuffer", "13_FrameBuffer\13_FrameBuffer.csproj", "{BEA53719-6630-AB9A-55BB-2E40BE9DD3E5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -92,6 +94,10 @@ Global
 		{14118DCB-150F-14D0-9C57-A408C7409E9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14118DCB-150F-14D0-9C57-A408C7409E9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14118DCB-150F-14D0-9C57-A408C7409E9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEA53719-6630-AB9A-55BB-2E40BE9DD3E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEA53719-6630-AB9A-55BB-2E40BE9DD3E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEA53719-6630-AB9A-55BB-2E40BE9DD3E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEA53719-6630-AB9A-55BB-2E40BE9DD3E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
