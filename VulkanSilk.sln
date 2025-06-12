@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "02_ValidationLayers", "02_V
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "03_PhysicalDeviceSelection", "03_PhysicalDeviceSelection\03_PhysicalDeviceSelection.csproj", "{15A654C2-E98E-77D1-4559-226AA18272EE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "04_LogicalDevice", "04_LogicalDevice\04_LogicalDevice.csproj", "{B365EE04-6899-5979-C44F-630C1FD9899B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{15A654C2-E98E-77D1-4559-226AA18272EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15A654C2-E98E-77D1-4559-226AA18272EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15A654C2-E98E-77D1-4559-226AA18272EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B365EE04-6899-5979-C44F-630C1FD9899B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B365EE04-6899-5979-C44F-630C1FD9899B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B365EE04-6899-5979-C44F-630C1FD9899B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B365EE04-6899-5979-C44F-630C1FD9899B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

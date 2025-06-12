@@ -30,7 +30,9 @@ unsafe class HelloTriangleApplication
     ExtDebugUtils debugUtils;
     DebugUtilsMessengerEXT debugMessenger;
 
-    PhysicalDevice physicalDevice;
+    PhysicalDevice physicalDevice; 
+    Device device;
+    Queue graphicsQueue;
 
     public void Run()
     {
@@ -57,6 +59,7 @@ unsafe class HelloTriangleApplication
         CreateInstance();
         SetupDebugMessenger();
         PickPhysicalDevice();
+        CreateLogicalDevice();
     }
 
     void MainLoop()
@@ -66,8 +69,11 @@ unsafe class HelloTriangleApplication
 
     void Cleanup()
     {
+        vk.DestroyDevice(device, null);
+
         if (enableValidationLayers)
             debugUtils.DestroyDebugUtilsMessenger(instance, debugMessenger, null);
+
         vk.DestroyInstance(instance, null);
         vk.Dispose();
         window.Dispose();
@@ -240,6 +246,51 @@ unsafe class HelloTriangleApplication
 
         return Vk.False;
     }
+
+    void CreateLogicalDevice()
+    {
+        var indices = FindQueueFamilies(physicalDevice);
+
+        DeviceQueueCreateInfo queueCreateInfo = new()
+        {
+            SType = StructureType.DeviceQueueCreateInfo,
+            QueueFamilyIndex = indices.GraphicsFamily!.Value,
+            QueueCount = 1
+        };
+
+        float queuePriority = 1.0f;
+        queueCreateInfo.PQueuePriorities = &queuePriority;
+
+        PhysicalDeviceFeatures deviceFeatures = new();
+
+        DeviceCreateInfo createInfo = new()
+        {
+            SType = StructureType.DeviceCreateInfo,
+            QueueCreateInfoCount = 1,
+            PQueueCreateInfos = &queueCreateInfo,
+            PEnabledFeatures = &deviceFeatures,
+            EnabledExtensionCount = 0
+        };
+
+        if (enableValidationLayers)
+        {
+            createInfo.EnabledLayerCount = (uint)validationLayers.Length;
+            createInfo.PpEnabledLayerNames = (byte**)SilkMarshal.StringArrayToPtr(validationLayers);
+        }
+        else
+        {
+            createInfo.EnabledLayerCount = 0;
+        }
+
+        if (vk.CreateDevice(physicalDevice, in createInfo, null, out device) != Result.Success)
+            throw new Exception("failed to create logical device!");
+
+        vk.GetDeviceQueue(device, indices.GraphicsFamily!.Value, 0, out graphicsQueue);
+
+        if (enableValidationLayers)
+            SilkMarshal.Free((nint)createInfo.PpEnabledLayerNames);
+    }
+
 }
 
 struct QueueFamilyIndices
