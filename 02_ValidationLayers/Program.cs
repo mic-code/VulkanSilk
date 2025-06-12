@@ -5,6 +5,8 @@ using Silk.NET.Vulkan;
 using Silk.NET.Core.Native;
 using System.Runtime.InteropServices;
 using Silk.NET.Vulkan.Extensions.EXT;
+using System;
+using System.Linq;
 
 namespace VulkanSilk;
 

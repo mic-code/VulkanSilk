@@ -3,6 +3,7 @@ using Silk.NET.Maths;
 using Silk.NET.Windowing;
 using Silk.NET.Vulkan;
 using Silk.NET.Core.Native;
+using System;
 
 namespace VulkanSilk;
 
