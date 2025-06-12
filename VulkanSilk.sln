@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "03_PhysicalDeviceSelection"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "04_LogicalDevice", "04_LogicalDevice\04_LogicalDevice.csproj", "{B365EE04-6899-5979-C44F-630C1FD9899B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "05_WindowSurface", "05_WindowSurface\05_WindowSurface.csproj", "{95DD0D7B-1420-975B-845B-1D7F51C9AA1D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{B365EE04-6899-5979-C44F-630C1FD9899B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B365EE04-6899-5979-C44F-630C1FD9899B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B365EE04-6899-5979-C44F-630C1FD9899B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95DD0D7B-1420-975B-845B-1D7F51C9AA1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95DD0D7B-1420-975B-845B-1D7F51C9AA1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95DD0D7B-1420-975B-845B-1D7F51C9AA1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95DD0D7B-1420-975B-845B-1D7F51C9AA1D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
