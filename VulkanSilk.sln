@@ -3,6 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "00_BaseCode", "00_BaseCode\00_BaseCode.csproj", "{03008CA9-A6EE-40B4-BA8F-58DB85DD4C83}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "01_InstanceCreation", "01_InstanceCreation\01_InstanceCreation.csproj", "{915A1875-91A9-4BD0-8A39-0C02C513A4DB}"
@@ -18,11 +23,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "06_SwapChainCreation", "06_SwapChainCreation\06_SwapChainCreation.csproj", "{0ABA3BF1-D04D-05C9-BBE1-CC205887C27A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "07_ImageViews", "07_ImageViews\07_ImageViews.csproj", "{9960F1DB-EB9E-89EE-A432-53BD9DAEBFAA}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "08_GraphicsPipeline", "08_GraphicsPipeline\08_GraphicsPipeline.csproj", "{26D52B70-C4D9-91BE-D95F-D0C4226EB409}"
 EndProject
@@ -43,6 +43,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "16_FramesInFlight", "16_FramesInFlight\16_FramesInFlight.csproj", "{8B1FE2A5-E0A5-BDF1-0C9E-EB63D7A87BA5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "17_SwapChainRecreation", "17_SwapChainRecreation\17_SwapChainRecreation.csproj", "{2944CB8F-6078-839E-AA98-99351DB4F702}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "18_VertexInput", "18_VertexInput\18_VertexInput.csproj", "{AA16E270-AEEA-5387-2989-F930C51EF943}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -122,6 +124,10 @@ Global
 		{2944CB8F-6078-839E-AA98-99351DB4F702}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2944CB8F-6078-839E-AA98-99351DB4F702}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2944CB8F-6078-839E-AA98-99351DB4F702}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA16E270-AEEA-5387-2989-F930C51EF943}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA16E270-AEEA-5387-2989-F930C51EF943}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA16E270-AEEA-5387-2989-F930C51EF943}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA16E270-AEEA-5387-2989-F930C51EF943}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
