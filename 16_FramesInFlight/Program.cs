@@ -21,8 +21,6 @@ unsafe class HelloTriangleApplication
 #else
     const bool enableValidationLayers = false;
 #endif
-    const int MaxFramesInFlight = 2;
-
     public int Width = 800;
     public int Height = 600;
 
@@ -116,7 +114,7 @@ unsafe class HelloTriangleApplication
         khrSwapChain.AcquireNextImage(device, swapChain, ulong.MaxValue, imageAvailableSemaphores[currentFrame], default, ref imageIndex);
 
         vk.ResetCommandBuffer(commandBuffers[currentFrame], CommandBufferResetFlags.None);
-        recordCommandBuffer(commandBuffers[currentFrame], imageIndex);
+        RecordCommandBuffer(commandBuffers[currentFrame], imageIndex);
 
         var waitSemaphores = stackalloc[] { imageAvailableSemaphores[currentFrame] };
         var waitStages = stackalloc[] { PipelineStageFlags.ColorAttachmentOutputBit };
@@ -153,12 +151,12 @@ unsafe class HelloTriangleApplication
 
         khrSwapChain.QueuePresent(presentQueue, in presentInfoKHR);
 
-        currentFrame = currentFrame + 1 % MaxFramesInFlight;
+        currentFrame = (currentFrame + 1) % (uint)swapChainImages.Length;
     }
 
     void Cleanup()
     {
-        for (int i = 0; i < MaxFramesInFlight; i++)
+        for (int i = 0; i < swapChainImages.Length; i++)
         {
             vk.DestroySemaphore(device, imageAvailableSemaphores[i], null);
             vk.DestroySemaphore(device, renderFinishedSemaphores[i], null);
@@ -877,13 +875,13 @@ unsafe class HelloTriangleApplication
 
     void CreateCommandBuffers()
     {
-        commandBuffers = new CommandBuffer[MaxFramesInFlight];
+        commandBuffers = new CommandBuffer[swapChainImages.Length];
         CommandBufferAllocateInfo commandBufferAllocateInfo = new()
         {
             SType = StructureType.CommandBufferAllocateInfo,
             CommandPool = commandPool,
             Level = CommandBufferLevel.Primary,
-            CommandBufferCount = 1
+            CommandBufferCount = (uint)swapChainImages.Length
         };
 
         fixed (CommandBuffer* commandBuffersPtr = commandBuffers)
@@ -891,7 +889,7 @@ unsafe class HelloTriangleApplication
                 throw new Exception("failed to allocate command buffers!");
     }
 
-    void recordCommandBuffer(CommandBuffer commandBuffer, uint imageIndex)
+    void RecordCommandBuffer(CommandBuffer commandBuffer, uint imageIndex)
     {
         CommandBufferBeginInfo commandBufferBeginInfo = new()
         {
@@ -952,34 +950,27 @@ unsafe class HelloTriangleApplication
 
     void CreateSyncObjects()
     {
-        imageAvailableSemaphores = new Semaphore[MaxFramesInFlight];
-        renderFinishedSemaphores = new Semaphore[MaxFramesInFlight];
-        inFlightFences = new Fence[MaxFramesInFlight];
+        imageAvailableSemaphores = new Semaphore[swapChainImages.Length];
+        renderFinishedSemaphores = new Semaphore[swapChainImages.Length];
+        inFlightFences = new Fence[swapChainImages.Length];
 
         SemaphoreCreateInfo semaphoreInfo = new()
         {
             SType = StructureType.SemaphoreCreateInfo
         };
 
-        fixed (Semaphore* imageAvailableSemaphoresPtr = imageAvailableSemaphores)
-            if (vk.CreateSemaphore(device, in semaphoreInfo, null, imageAvailableSemaphoresPtr) != Result.Success)
-                throw new Exception("failed to create imageAvailableSemaphores!");
-
-
-        fixed (Semaphore* renderFinishedSemaphoresPtr = renderFinishedSemaphores)
-            if (vk.CreateSemaphore(device, in semaphoreInfo, null, renderFinishedSemaphoresPtr) != Result.Success)
-                throw new Exception("failed to create renderFinishedSemaphores!");
-
         FenceCreateInfo fenceInfo = new()
         {
             SType = StructureType.FenceCreateInfo,
+            Flags = FenceCreateFlags.SignaledBit
         };
 
-        for (int i = 0; i < MaxFramesInFlight; i++)
+        for (int i = 0; i < swapChainImages.Length; i++)
         {
-            //first fence need to be signaled
-            fenceInfo.Flags = i == 0 ? FenceCreateFlags.SignaledBit : FenceCreateFlags.None;
-
+            if (vk.CreateSemaphore(device, in semaphoreInfo, null, out imageAvailableSemaphores[i]) != Result.Success)
+                throw new Exception("failed to create imageAvailableSemaphores!");
+            if (vk.CreateSemaphore(device, in semaphoreInfo, null, out renderFinishedSemaphores[i]) != Result.Success)
+                throw new Exception("failed to create renderFinishedSemaphores!");
             if (vk.CreateFence(device, in fenceInfo, null, out inFlightFences[i]) != Result.Success)
                 throw new Exception("failed to create inFlightFences!");
         }
