@@ -11,10 +11,8 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.Marshalling;
 
 namespace VulkanSilk;
-
 
 unsafe class HelloTriangleApplication
 {
@@ -108,7 +106,8 @@ unsafe class HelloTriangleApplication
 
     void DrawFrame(double delta)
     {
-        vk.WaitForFences(device, 1, in inFlightFence, true, UInt64.MaxValue);
+        vk.WaitForFences(device, 1, in inFlightFence, true, ulong.MaxValue);
+        vk.ResetFences(device, 1, in inFlightFence);
 
         uint imageIndex = 0;
         khrSwapChain.AcquireNextImage(device, swapChain, ulong.MaxValue, imageAvailableSemaphore, default, ref imageIndex);
@@ -120,25 +119,38 @@ unsafe class HelloTriangleApplication
         var waitStages = stackalloc[] { PipelineStageFlags.ColorAttachmentOutputBit };
         var signalSemaphores = stackalloc[] { renderFinishedSemaphore };
 
-        //fixed (CommandBuffer* commandBufferPtr = commandBuffer)
+        var buffer = commandBuffer;
+        SubmitInfo submitInfo = new()
         {
+            SType = StructureType.SubmitInfo,
+            WaitSemaphoreCount = 1,
+            PWaitSemaphores = waitSemaphores,
+            PWaitDstStageMask = waitStages,
+            CommandBufferCount = 1,
+            PCommandBuffers = &buffer,
+            SignalSemaphoreCount = 1,
+            PSignalSemaphores = signalSemaphores
+        };
 
-            SubmitInfo submitInfo = new()
-            {
-                SType = StructureType.SubmitInfo,
-                PWaitSemaphores = waitSemaphores,
-                PWaitDstStageMask = waitStages,
-                CommandBufferCount = 1,
-                PCommandBuffers = (CommandBuffer*)commandBuffer.Handle,
-                SignalSemaphoreCount = 1,
-                PSignalSemaphores = signalSemaphores
-            };
 
-            if (vk.QueueSubmit(graphicsQueue, 1, in submitInfo, inFlightFence) != Result.Success)
-                throw new Exception("failed to submit draw command buffer!");
-        }
+        if (vk.QueueSubmit(graphicsQueue, 1, in submitInfo, inFlightFence) != Result.Success)
+            throw new Exception("failed to submit draw command buffer!");
 
-        vk.ResetFences(device, 1, in inFlightFence);
+        var swapChains = stackalloc[] { swapChain };
+
+        PresentInfoKHR presentInfoKHR = new()
+        {
+            SType = StructureType.PresentInfoKhr,
+            WaitSemaphoreCount = 1,
+            PWaitSemaphores = signalSemaphores,
+            PSwapchains = swapChains,
+            PImageIndices = &imageIndex,
+            SwapchainCount = 1
+        };
+
+        khrSwapChain.QueuePresent(presentQueue, in presentInfoKHR);
+
+
     }
 
     void Cleanup()
@@ -635,14 +647,27 @@ unsafe class HelloTriangleApplication
             PColorAttachments = &attachmentReference
         };
 
+        SubpassDependency subpassDependency = new()
+        {
+            SrcSubpass = Vk.SubpassExternal,
+            DstSubpass = 0,
+            SrcStageMask = PipelineStageFlags.ColorAttachmentOutputBit,
+            SrcAccessMask = 0,
+            DstStageMask = PipelineStageFlags.ColorAttachmentOutputBit,
+            DstAccessMask = AccessFlags.ColorAttachmentWriteBit,
+        };
+
         RenderPassCreateInfo renderPassCreateInfo = new()
         {
             SType = StructureType.RenderPassCreateInfo,
             AttachmentCount = 1,
             PAttachments = &colorAttachment,
             SubpassCount = 1,
-            PSubpasses = &subpass
+            PSubpasses = &subpass,
+            DependencyCount = 1,
+            PDependencies = &subpassDependency
         };
+
 
         if (vk.CreateRenderPass(device, in renderPassCreateInfo, null, out renderPass) != Result.Success)
             throw new Exception("failed to create render pass!");
