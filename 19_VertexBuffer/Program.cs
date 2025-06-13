@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Buffer = Silk.NET.Vulkan.Buffer;
@@ -1055,6 +1054,14 @@ unsafe class HelloTriangleApplication
             Extent = swapChainExtent
         };
         vk.CmdSetScissor(commandBuffer, 0, 1, in scissor);
+
+        var vertexBuffers = new Buffer[] { vertexBuffer };
+        var offsets = new ulong[] { 0 };
+
+        fixed (ulong* offsetsPtr = offsets)
+        fixed (Buffer* vertexBuffersPtr = vertexBuffers)
+            vk.CmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
+
         vk.CmdDraw(commandBuffer, 3, 1, 0, 0);
         vk.CmdEndRenderPass(commandBuffer);
 
