@@ -42,6 +42,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "15_HelloTriangle", "15_Hell
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "16_FramesInFlight", "16_FramesInFlight\16_FramesInFlight.csproj", "{8B1FE2A5-E0A5-BDF1-0C9E-EB63D7A87BA5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "17_SwapChainRecreation", "17_SwapChainRecreation\17_SwapChainRecreation.csproj", "{2944CB8F-6078-839E-AA98-99351DB4F702}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -116,6 +118,10 @@ Global
 		{8B1FE2A5-E0A5-BDF1-0C9E-EB63D7A87BA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B1FE2A5-E0A5-BDF1-0C9E-EB63D7A87BA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B1FE2A5-E0A5-BDF1-0C9E-EB63D7A87BA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2944CB8F-6078-839E-AA98-99351DB4F702}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2944CB8F-6078-839E-AA98-99351DB4F702}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2944CB8F-6078-839E-AA98-99351DB4F702}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2944CB8F-6078-839E-AA98-99351DB4F702}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
