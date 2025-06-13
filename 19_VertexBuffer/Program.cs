@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Buffer = Silk.NET.Vulkan.Buffer;
@@ -67,6 +68,7 @@ unsafe class HelloTriangleApplication
     Semaphore[] renderFinishedSemaphores;
     Fence[] inFlightFences;
     Buffer vertexBuffer;
+    DeviceMemory vertexBufferMemory;
 
     bool framebufferResized = false;
     uint currentFrame = 0;
@@ -152,6 +154,7 @@ unsafe class HelloTriangleApplication
         CleanupSwapChain();
 
         vk.DestroyBuffer(device, vertexBuffer, null);
+        vk.FreeMemory(device, vertexBufferMemory, null);
 
         for (int i = 0; i < swapChainImages.Length; i++)
         {
@@ -734,7 +737,7 @@ unsafe class HelloTriangleApplication
 
     void CreateGraphicsPipeline()
     {
-        var vertShaderCode = File.ReadAllBytes("../../../../18_VertexBuffers/vert.spv");
+        var vertShaderCode = File.ReadAllBytes("../../../../18_VertexInput/vert.spv");
         var fragShaderCode = File.ReadAllBytes("../../../../09_ShaderModules/frag.spv");
 
         var vertShaderModule = CreateShaderModule(vertShaderCode);
@@ -950,6 +953,38 @@ unsafe class HelloTriangleApplication
 
         if (vk.CreateBuffer(device, in bufferInfo, default, out vertexBuffer) != Result.Success)
             throw new Exception("failed to create vertex buffer!");
+
+
+        MemoryRequirements memRequirements = new();
+        vk.GetBufferMemoryRequirements(device, vertexBuffer, out memRequirements);
+
+        MemoryAllocateInfo memoryAllocateInfo = new()
+        {
+            SType = StructureType.MemoryAllocateInfo,
+            AllocationSize = (uint)(memRequirements.Size),
+            MemoryTypeIndex = FindMemoryType(memRequirements.MemoryTypeBits, MemoryPropertyFlags.HostVisibleBit | MemoryPropertyFlags.HostCoherentBit)
+        };
+
+        if (vk.AllocateMemory(device, in memoryAllocateInfo, default, out vertexBufferMemory) != Result.Success)
+            throw new Exception("failed to allocate vertex buffer memory!");
+
+        vk.BindBufferMemory(device, vertexBuffer, vertexBufferMemory, 0);
+
+        void* data;
+        vk.MapMemory(device, vertexBufferMemory, 0, bufferInfo.Size, 0, &data);
+        vertices.AsSpan().CopyTo(new Span<Vertex>(data, vertices.Length));
+        vk.UnmapMemory(device, vertexBufferMemory);
+    }
+
+    uint FindMemoryType(uint typeFilter, MemoryPropertyFlags properties)
+    {
+        vk.GetPhysicalDeviceMemoryProperties(physicalDevice, out var memProperties);
+
+        for (int i = 0; i < memProperties.MemoryTypeCount; i++)
+            if ((typeFilter & (1 << i)) != 0 && (memProperties.MemoryTypes[i].PropertyFlags & properties) == properties)
+                return (uint)i;
+
+        throw new Exception("failed to find suitable memory type!");
     }
 
     void CreateCommandBuffers()

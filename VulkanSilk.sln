@@ -46,6 +46,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "17_SwapChainRecreation", "1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "18_VertexInput", "18_VertexInput\18_VertexInput.csproj", "{AA16E270-AEEA-5387-2989-F930C51EF943}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "19_VertexBuffer", "19_VertexBuffer\19_VertexBuffer.csproj", "{01FD1B18-386C-F40C-7E1A-18E4CF0AEA07}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -128,6 +130,10 @@ Global
 		{AA16E270-AEEA-5387-2989-F930C51EF943}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA16E270-AEEA-5387-2989-F930C51EF943}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA16E270-AEEA-5387-2989-F930C51EF943}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01FD1B18-386C-F40C-7E1A-18E4CF0AEA07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01FD1B18-386C-F40C-7E1A-18E4CF0AEA07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01FD1B18-386C-F40C-7E1A-18E4CF0AEA07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01FD1B18-386C-F40C-7E1A-18E4CF0AEA07}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
