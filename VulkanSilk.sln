@@ -56,6 +56,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "22_DescriptorSetLayout", "2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "23_DescriptorSets", "23_DescriptorSets\23_DescriptorSets.csproj", "{EE79FDD2-8D38-EBFA-1BB3-1CA61F9CCA69}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "24_TextureImage", "24_TextureImage\24_TextureImage.csproj", "{58E364E4-DE57-251C-2074-9C00661902ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -158,6 +160,10 @@ Global
 		{EE79FDD2-8D38-EBFA-1BB3-1CA61F9CCA69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE79FDD2-8D38-EBFA-1BB3-1CA61F9CCA69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE79FDD2-8D38-EBFA-1BB3-1CA61F9CCA69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58E364E4-DE57-251C-2074-9C00661902ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58E364E4-DE57-251C-2074-9C00661902ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58E364E4-DE57-251C-2074-9C00661902ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58E364E4-DE57-251C-2074-9C00661902ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
