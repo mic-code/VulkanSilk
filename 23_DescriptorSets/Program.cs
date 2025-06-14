@@ -280,7 +280,7 @@ unsafe class HelloTriangleApplication
 
         UniformBufferObject ubo = new()
         {
-            model = Matrix4X4<float>.Identity * Matrix4X4.CreateFromAxisAngle<float>(new Vector3D<float>(0, 0, 1), time * Radians(90.0f)),
+            model = Matrix4X4<float>.Identity * Matrix4X4.CreateFromAxisAngle(new Vector3D<float>(0, 0, 1), time * Radians(90.0f)),
             view = Matrix4X4.CreateLookAt(new Vector3D<float>(2, 2, 2), new Vector3D<float>(0, 0, 0), new Vector3D<float>(0, 0, 1)),
             proj = Matrix4X4.CreatePerspectiveFieldOfView(Radians(45.0f), (float)swapChainExtent.Width / swapChainExtent.Height, 0.1f, 10.0f),
         };
@@ -802,7 +802,7 @@ unsafe class HelloTriangleApplication
 
     void CreateGraphicsPipeline()
     {
-        var vertShaderCode = File.ReadAllBytes("../../../../18_VertexInput/vert.spv");
+        var vertShaderCode = File.ReadAllBytes("../../../../22_DescriptorSetLayout/vert.spv");
         var fragShaderCode = File.ReadAllBytes("../../../../09_ShaderModules/frag.spv");
 
         var vertShaderModule = CreateShaderModule(vertShaderCode);
@@ -865,7 +865,7 @@ unsafe class HelloTriangleApplication
             PolygonMode = PolygonMode.Fill,
             LineWidth = 1,
             CullMode = CullModeFlags.BackBit,
-            FrontFace = FrontFace.Clockwise,
+            FrontFace = FrontFace.CounterClockwise,
             DepthBiasEnable = false
         };
 
@@ -900,6 +900,7 @@ unsafe class HelloTriangleApplication
         PipelineLayoutCreateInfo pipelineLayoutInfo = new()
         {
             SType = StructureType.PipelineLayoutCreateInfo,
+            SetLayoutCount = 1,
             PSetLayouts = &setLayout
         };
 
@@ -1193,6 +1194,29 @@ unsafe class HelloTriangleApplication
                 if (vk.AllocateDescriptorSets(device, in allocInfo, descriptorSetsPtr) != Result.Success)
                     throw new Exception("failed to allocate descriptor sets!");
         }
+
+        for (int i = 0; i < swapChainImages.Length; i++)
+        {
+            DescriptorBufferInfo bufferInfo = new()
+            {
+                Buffer = uniformBuffers[i],
+                Offset = 0,
+                Range = (uint)sizeof(UniformBufferObject)
+            };
+
+            WriteDescriptorSet descriptorWrite = new()
+            {
+                SType = StructureType.WriteDescriptorSet,
+                DstSet = descriptorSets[i],
+                DstBinding = 0,
+                DstArrayElement = 0,
+                DescriptorType = DescriptorType.UniformBuffer,
+                DescriptorCount = 1,
+                PBufferInfo = &bufferInfo,
+            };
+
+            vk.UpdateDescriptorSets(device, 1, in descriptorWrite, 0, null);
+        }
     }
 
     void CreateCommandBuffers()
@@ -1269,9 +1293,7 @@ unsafe class HelloTriangleApplication
         vk.CmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
 
         vk.CmdBindIndexBuffer(commandBuffer, indexBuffer, 0, IndexType.Uint16);
-
-
-        //vk.CmdDraw(commandBuffer, (uint)vertices.Length, 1, 0, 0);
+        vk.CmdBindDescriptorSets(commandBuffer, PipelineBindPoint.Graphics, pipelineLayout, 0, 1, in descriptorSets[currentFrame], 0, null);
         vk.CmdDrawIndexed(commandBuffer, (uint)indices.Length, 1, 0, 0, 0);
         vk.CmdEndRenderPass(commandBuffer);
 

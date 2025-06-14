@@ -895,6 +895,7 @@ unsafe class HelloTriangleApplication
         PipelineLayoutCreateInfo pipelineLayoutInfo = new()
         {
             SType = StructureType.PipelineLayoutCreateInfo,
+            SetLayoutCount = 1,
             PSetLayouts = &setLayout
         };
 
