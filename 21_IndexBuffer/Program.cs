@@ -27,10 +27,13 @@ unsafe class HelloTriangleApplication
 
     Vertex[] vertices =
     [
-        new Vertex { pos = new Vector2D<float>(0.0f,-0.5f), color = new Vector3D<float>(1.0f, 0.0f, 0.0f) },
-        new Vertex { pos = new Vector2D<float>(0.5f,0.5f), color = new Vector3D<float>(0.0f, 1.0f, 0.0f) },
-        new Vertex { pos = new Vector2D<float>(-0.5f,0.5f), color = new Vector3D<float>(0.0f, 0.0f, 1.0f) },
+        new Vertex { pos = new Vector2D<float>(-0.5f,-0.5f), color = new Vector3D<float>(1.0f, 0.0f, 0.0f) },
+        new Vertex { pos = new Vector2D<float>(0.5f,-0.5f), color = new Vector3D<float>(0.0f, 1.0f, 0.0f) },
+        new Vertex { pos = new Vector2D<float>(0.5f,0.5f), color = new Vector3D<float>(0.0f, 0.0f, 1.0f) },
+        new Vertex { pos = new Vector2D<float>(-0.5f,0.5f), color = new Vector3D<float>(1.0f, 1.0f, 1.0f) },
     ];
+
+    ushort[] indices = [0, 1, 2, 2, 3, 0];
 
     string[] validationLayers = ["VK_LAYER_KHRONOS_validation"];
     readonly string[] deviceExtensions = [KhrSwapchain.ExtensionName];
@@ -68,6 +71,8 @@ unsafe class HelloTriangleApplication
     Fence[] inFlightFences;
     Buffer vertexBuffer;
     DeviceMemory vertexBufferMemory;
+    Buffer indexBuffer;
+    DeviceMemory indexBufferMemory;
 
     bool framebufferResized = false;
     uint currentFrame = 0;
@@ -107,6 +112,7 @@ unsafe class HelloTriangleApplication
         CreateFramebuffers();
         CreateCommandPool();
         CreateVertexBuffer();
+        CreateIndexBuffer();
         CreateCommandBuffers();
         CreateSyncObjects();
     }
@@ -151,6 +157,9 @@ unsafe class HelloTriangleApplication
     void Cleanup()
     {
         CleanupSwapChain();
+
+        vk.DestroyBuffer(device, indexBuffer, null);
+        vk.FreeMemory(device, indexBufferMemory, null);
 
         vk.DestroyBuffer(device, vertexBuffer, null);
         vk.FreeMemory(device, vertexBufferMemory, null);
@@ -214,7 +223,6 @@ unsafe class HelloTriangleApplication
             SignalSemaphoreCount = 1,
             PSignalSemaphores = signalSemaphores
         };
-
 
         if (vk.QueueSubmit(graphicsQueue, 1, in submitInfo, inFlightFences[currentFrame]) != Result.Success)
             throw new Exception("failed to submit draw command buffer!");
@@ -963,6 +971,28 @@ unsafe class HelloTriangleApplication
         vk.FreeMemory(device, stagingBufferMemory, null);
     }
 
+    void CreateIndexBuffer()
+    {
+        var size = (uint)(sizeof(ushort) * indices.Length);
+        Buffer stagingBuffer = default;
+        DeviceMemory stagingBufferMemory = default;
+
+        var properties = MemoryPropertyFlags.HostVisibleBit | MemoryPropertyFlags.HostCoherentBit;
+        CreateBuffer(size, BufferUsageFlags.TransferSrcBit, properties, ref stagingBuffer, ref stagingBufferMemory);
+
+        void* data;
+        vk.MapMemory(device, stagingBufferMemory, 0, size, 0, &data);
+        indices.AsSpan().CopyTo(new Span<ushort>(data, indices.Length));
+        vk.UnmapMemory(device, stagingBufferMemory);
+
+        var usage = BufferUsageFlags.TransferDstBit | BufferUsageFlags.IndexBufferBit;
+        CreateBuffer(size, usage, MemoryPropertyFlags.DeviceLocalBit, ref indexBuffer, ref indexBufferMemory);
+
+        CopyBuffer(stagingBuffer, indexBuffer, size);
+        vk.DestroyBuffer(device, stagingBuffer, null);
+        vk.FreeMemory(device, stagingBufferMemory, null);
+    }
+
     void CreateBuffer(ulong size, BufferUsageFlags usage, MemoryPropertyFlags properties, ref Buffer buffer, ref DeviceMemory deviceMemory)
     {
         BufferCreateInfo bufferInfo = new()
@@ -1118,7 +1148,11 @@ unsafe class HelloTriangleApplication
         var offsets = new ulong[] { 0 };
         vk.CmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
 
-        vk.CmdDraw(commandBuffer, (uint)vertices.Length, 1, 0, 0);
+        vk.CmdBindIndexBuffer(commandBuffer, indexBuffer, 0, IndexType.Uint16);
+
+
+        //vk.CmdDraw(commandBuffer, (uint)vertices.Length, 1, 0, 0);
+        vk.CmdDrawIndexed(commandBuffer, (uint)indices.Length, 1, 0, 0, 0);
         vk.CmdEndRenderPass(commandBuffer);
 
         if (vk.EndCommandBuffer(commandBuffer) != Result.Success)

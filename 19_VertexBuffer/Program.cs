@@ -1057,12 +1057,9 @@ unsafe class HelloTriangleApplication
 
         var vertexBuffers = new Buffer[] { vertexBuffer };
         var offsets = new ulong[] { 0 };
+        vk.CmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
 
-        fixed (ulong* offsetsPtr = offsets)
-        fixed (Buffer* vertexBuffersPtr = vertexBuffers)
-            vk.CmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
-
-        vk.CmdDraw(commandBuffer, 3, 1, 0, 0);
+        vk.CmdDraw(commandBuffer, (uint)vertices.Length, 1, 0, 0);
         vk.CmdEndRenderPass(commandBuffer);
 
         if (vk.EndCommandBuffer(commandBuffer) != Result.Success)
