@@ -60,6 +60,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "24_TextureImage", "24_Textu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "25_Sampler", "25_Sampler\25_Sampler.csproj", "{D23749B2-1A37-D8BF-A991-A27178A9C9E6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "26_TextureMapping", "26_TextureMapping\26_TextureMapping.csproj", "{32E490D1-5A3A-0B46-62D9-354DC54704DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -170,6 +172,10 @@ Global
 		{D23749B2-1A37-D8BF-A991-A27178A9C9E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D23749B2-1A37-D8BF-A991-A27178A9C9E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D23749B2-1A37-D8BF-A991-A27178A9C9E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32E490D1-5A3A-0B46-62D9-354DC54704DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32E490D1-5A3A-0B46-62D9-354DC54704DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32E490D1-5A3A-0B46-62D9-354DC54704DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32E490D1-5A3A-0B46-62D9-354DC54704DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
