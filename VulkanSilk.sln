@@ -64,6 +64,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "26_TextureMapping", "26_Tex
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "27_DepthBuffering", "27_DepthBuffering\27_DepthBuffering.csproj", "{8DC0A464-7CA0-78D8-C05B-B066E3E9157E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "28_ModelLoading", "28_ModelLoading\28_ModelLoading.csproj", "{0249A153-9FD6-7797-631F-3EDE30D21132}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -182,6 +184,10 @@ Global
 		{8DC0A464-7CA0-78D8-C05B-B066E3E9157E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DC0A464-7CA0-78D8-C05B-B066E3E9157E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DC0A464-7CA0-78D8-C05B-B066E3E9157E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0249A153-9FD6-7797-631F-3EDE30D21132}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0249A153-9FD6-7797-631F-3EDE30D21132}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0249A153-9FD6-7797-631F-3EDE30D21132}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0249A153-9FD6-7797-631F-3EDE30D21132}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
