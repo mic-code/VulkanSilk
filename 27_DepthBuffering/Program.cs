@@ -133,9 +133,9 @@ unsafe class HelloTriangleApplication
         CreateRenderPass();
         CreateDescriptorSetLayout();
         CreateGraphicsPipeline();
-        CreateFramebuffers();
         CreateCommandPool();
         CreateDepthResources();
+        CreateFramebuffers();
         CreateTextureImage();
         CreateTextureImageView();
         CreateTextureSampler();
@@ -171,11 +171,16 @@ unsafe class HelloTriangleApplication
 
         CreateSwapChain();
         CreateImageViews();
+        CreateDepthResources();
         CreateFramebuffers();
     }
 
     void CleanupSwapChain()
     {
+        vk.DestroyImageView(device, depthImageView, null);
+        vk.DestroyImage(device, depthImage, null);
+        vk.FreeMemory(device, depthImageMemory, null);
+
         foreach (var frameBuffer in swapChainFramebuffers)
             vk.DestroyFramebuffer(device, frameBuffer, null);
 
@@ -744,33 +749,55 @@ unsafe class HelloTriangleApplication
             FinalLayout = ImageLayout.PresentSrcKhr
         };
 
-        AttachmentReference attachmentReference = new()
+        AttachmentReference colorAttachmentReference = new()
         {
             Attachment = 0,
             Layout = ImageLayout.ColorAttachmentOptimal
         };
 
+        AttachmentDescription depthAttachment = new()
+        {
+            Format = FindDepthFormat(),
+            Samples = SampleCountFlags.Count1Bit,
+            LoadOp = AttachmentLoadOp.Clear,
+            StoreOp = AttachmentStoreOp.DontCare,
+            StencilLoadOp = AttachmentLoadOp.DontCare,
+            StencilStoreOp = AttachmentStoreOp.DontCare,
+            InitialLayout = ImageLayout.Undefined,
+            FinalLayout = ImageLayout.DepthStencilAttachmentOptimal
+        };
+
+        AttachmentReference depthAttachmentReference = new()
+        {
+            Attachment = 1,
+            Layout = ImageLayout.DepthStencilAttachmentOptimal
+        };
+
         SubpassDescription subpass = new()
         {
+            PipelineBindPoint = PipelineBindPoint.Graphics,
             ColorAttachmentCount = 1,
-            PColorAttachments = &attachmentReference
+            PColorAttachments = &colorAttachmentReference,
+            PDepthStencilAttachment = &depthAttachmentReference
         };
 
         SubpassDependency subpassDependency = new()
         {
             SrcSubpass = Vk.SubpassExternal,
             DstSubpass = 0,
-            SrcStageMask = PipelineStageFlags.ColorAttachmentOutputBit,
-            SrcAccessMask = 0,
-            DstStageMask = PipelineStageFlags.ColorAttachmentOutputBit,
-            DstAccessMask = AccessFlags.ColorAttachmentWriteBit,
+            SrcStageMask = PipelineStageFlags.ColorAttachmentOutputBit | PipelineStageFlags.LateFragmentTestsBit,
+            SrcAccessMask = AccessFlags.DepthStencilAttachmentWriteBit,
+            DstStageMask = PipelineStageFlags.ColorAttachmentOutputBit | PipelineStageFlags.EarlyFragmentTestsBit,
+            DstAccessMask = AccessFlags.ColorAttachmentWriteBit | AccessFlags.DepthStencilAttachmentWriteBit,
         };
+
+        var attachments = stackalloc[] { colorAttachment, depthAttachment };
 
         RenderPassCreateInfo renderPassCreateInfo = new()
         {
             SType = StructureType.RenderPassCreateInfo,
-            AttachmentCount = 1,
-            PAttachments = &colorAttachment,
+            AttachmentCount = 2,
+            PAttachments = attachments,
             SubpassCount = 1,
             PSubpasses = &subpass,
             DependencyCount = 1,
@@ -926,6 +953,18 @@ unsafe class HelloTriangleApplication
         var bindingDescription = Vertex.GetBindingDescription();
         var attributeDescription = Vertex.GetAttributeDescriptions();
 
+        PipelineDepthStencilStateCreateInfo depthStencilState = new()
+        {
+            SType = StructureType.PipelineDepthStencilStateCreateInfo,
+            DepthTestEnable = true,
+            DepthWriteEnable = true,
+            DepthCompareOp = CompareOp.Less,
+            DepthBoundsTestEnable = false,
+            MinDepthBounds = 0,
+            MaxDepthBounds = 1,
+            StencilTestEnable = false,
+        };
+
         fixed (VertexInputAttributeDescription* attributeDescriptionPtr = attributeDescription)
         {
             PipelineVertexInputStateCreateInfo vertexInputInfo = new()
@@ -947,7 +986,7 @@ unsafe class HelloTriangleApplication
                 PViewportState = &viewportState,
                 PRasterizationState = &rasterizationState,
                 PMultisampleState = &multisampleState,
-                PDepthStencilState = null,
+                PDepthStencilState = &depthStencilState,
                 PColorBlendState = &colorBlendState,
                 PDynamicState = &dynamicStateInfo,
                 Layout = pipelineLayout,
@@ -992,12 +1031,13 @@ unsafe class HelloTriangleApplication
         swapChainFramebuffers = new Framebuffer[swapChainImageViews.Length];
         for (int i = 0; i < swapChainImageViews.Length; i++)
         {
-            var attachments = stackalloc[] { swapChainImageViews[i] };
+            var attachments = stackalloc[] { swapChainImageViews[i], depthImageView };
+
             FramebufferCreateInfo framebufferInfo = new()
             {
                 SType = StructureType.FramebufferCreateInfo,
                 RenderPass = renderPass,
-                AttachmentCount = 1,
+                AttachmentCount = 2,
                 PAttachments = attachments,
                 Width = swapChainExtent.Width,
                 Height = swapChainExtent.Height,
@@ -1610,14 +1650,21 @@ unsafe class HelloTriangleApplication
             Color = new ClearColorValue(0, 0, 0, 1),
         };
 
+        ClearValue clearValue2 = new()
+        {
+            DepthStencil = new ClearDepthStencilValue(1, 0)
+        };
+
+        var clearValues = stackalloc[] { clearValue, clearValue2 };
+
         RenderPassBeginInfo renderPassBeginInfo = new()
         {
             SType = StructureType.RenderPassBeginInfo,
             RenderPass = renderPass,
             Framebuffer = swapChainFramebuffers[imageIndex],
             RenderArea = renderArea,
-            ClearValueCount = 1,
-            PClearValues = &clearValue
+            ClearValueCount = 2,
+            PClearValues = clearValues
         };
 
         vk.CmdBeginRenderPass(commandBuffer, in renderPassBeginInfo, SubpassContents.Inline);
