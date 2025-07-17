@@ -68,6 +68,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "28_ModelLoading", "28_Model
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "29_MipMapping", "29_MipMapping\29_MipMapping.csproj", "{2D5E3FF2-9993-CE7A-E0EF-158C2C573A4C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "30_MultiSampling", "30_MultiSampling\30_MultiSampling.csproj", "{2193B684-A647-04F7-D9CA-2CEA93489895}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -194,6 +196,10 @@ Global
 		{2D5E3FF2-9993-CE7A-E0EF-158C2C573A4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D5E3FF2-9993-CE7A-E0EF-158C2C573A4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D5E3FF2-9993-CE7A-E0EF-158C2C573A4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2193B684-A647-04F7-D9CA-2CEA93489895}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2193B684-A647-04F7-D9CA-2CEA93489895}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2193B684-A647-04F7-D9CA-2CEA93489895}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2193B684-A647-04F7-D9CA-2CEA93489895}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
