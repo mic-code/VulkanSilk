@@ -1161,9 +1161,7 @@ unsafe class HelloTriangleApplication
         var mipWidth = width;
         var mipHeight = height;
 
-        Console.WriteLine("GenerateMipmaps");
-
-        Console.WriteLine("Transition first layer to transfer src");
+        //Transition first layer to transfer src
         barrier.OldLayout = ImageLayout.Undefined;
         barrier.NewLayout = ImageLayout.TransferSrcOptimal;
         barrier.SrcAccessMask = AccessFlags.TransferReadBit;
@@ -1184,19 +1182,16 @@ unsafe class HelloTriangleApplication
             barrier.DstAccessMask = AccessFlags.TransferWriteBit;
             barrier.SubresourceRange.BaseMipLevel = i;
 
-            Console.WriteLine("prepare " + barrier.SubresourceRange.BaseMipLevel);
-
+            //Transition target layer to TrasnferDst
             vk.CmdPipelineBarrier(commandBuffer,
                 PipelineStageFlags.TransferBit, PipelineStageFlags.TransferBit, 0,
                 0, null,
                 0, null,
                 1, in barrier);
 
-            Console.WriteLine("done");
 
 
-            Console.WriteLine("blit");
-
+            //Blit to target layer
             ImageBlit blit = new()
             {
                 SrcOffsets =
@@ -1233,10 +1228,7 @@ unsafe class HelloTriangleApplication
                 Filter.Linear);
 
 
-            Console.WriteLine("done");
-
-            Console.WriteLine("transition to transfer src for next level");
-
+            //Transition target layer to TransferSrc for next level
             barrier.OldLayout = ImageLayout.TransferDstOptimal;
             barrier.NewLayout = ImageLayout.TransferSrcOptimal;
             barrier.SrcAccessMask = AccessFlags.TransferReadBit;
@@ -1250,13 +1242,12 @@ unsafe class HelloTriangleApplication
                 1, in barrier);
 
 
-            Console.WriteLine("done");
 
             if (mipWidth > 1) mipWidth /= 2;
             if (mipHeight > 1) mipHeight /= 2;
         }
 
-        Console.WriteLine("transition all to shader read");
+        //Transition all to shader read
         barrier.OldLayout = ImageLayout.TransferSrcOptimal;
         barrier.NewLayout = ImageLayout.ShaderReadOnlyOptimal;
         barrier.SrcAccessMask = AccessFlags.TransferWriteBit;
@@ -1270,10 +1261,8 @@ unsafe class HelloTriangleApplication
               0, null,
               1, in barrier);
 
-        Console.WriteLine("done");
 
         EndSingleTimeCommands(commandBuffer);
-        Console.WriteLine("GenerateMipmaps Done");
     }
 
     void CreateImage(uint width, uint height, uint mipLevels, Format format, ImageTiling tiling, ImageUsageFlags usage, MemoryPropertyFlags properties, ref Image image, ref DeviceMemory imageMemory)
