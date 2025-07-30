@@ -1528,7 +1528,7 @@ unsafe class HelloTriangleApplication
             CompareOp = CompareOp.Always,
             MipmapMode = SamplerMipmapMode.Linear,
             MipLodBias = 0,
-            MinLod = mipLevels / 2,
+            MinLod = 0,
             MaxLod = Vk.LodClampNone,
         };
 
